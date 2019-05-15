@@ -1,22 +1,18 @@
-const puppeteer = require("puppeteer");
-const sessionFactory = require("./factories/sessionFactories");
-const userFactory = require("./factories/userFactory");
-let browser;
+const Page = require("./helpers/page");
+
 let page;
 
 beforeEach(async () => {
   jest.setTimeout(30000);
-  browser = await puppeteer.launch({
-    headless: false
-  });
-  page = await browser.newPage();
+
+  page = await Page.build();
   expect(page).toBeDefined();
 
   await page.goto("localhost:3000");
 });
 
 afterEach(async () => {
-  await browser.close();
+  await page.close();
 });
 
 test("The header has the correct text", async () => {
@@ -34,22 +30,14 @@ test("The user can login through google login", async () => {
 });
 
 test("When signed in, shows logout button", async () => {
-  // const id = "5cd6eb7533a4c7466aff5940";
-  const user = await userFactory();
-  const { session, sig } = sessionFactory(user);
-
-  await page.setCookie({ name: "session", value: session });
-  await page.setCookie({ name: "session.sig", value: sig });
-  await page.goto("localhost:3000");
+  // uses custom page login function
+  await page.login();
 
   //pupeteer will wait for the element to render
   await page.waitFor("a[href='/auth/logout']");
 
   //gets element
-  const logoutText = await page.$eval(
-    "a[href='/auth/logout']",
-    el => el.innerHTML
-  );
+  const logoutText = await page.getContentsOf("a[href='/auth/logout']");
 
   expect(logoutText).toEqual("Logout");
 });
