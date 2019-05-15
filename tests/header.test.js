@@ -3,10 +3,7 @@ const Page = require("./helpers/page");
 let page;
 
 beforeEach(async () => {
-  jest.setTimeout(30000);
-
   page = await Page.build();
-  expect(page).toBeDefined();
 
   await page.goto("localhost:3000");
 });
