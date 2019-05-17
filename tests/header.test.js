@@ -12,7 +12,7 @@ afterEach(async () => {
   await page.close();
 });
 
-test("The header has the correct text", async () => {
+test.only("The header has the correct text", async () => {
   const text = await page.$eval("a.brand-logo", el => el.innerHTML);
 
   expect(text).toEqual("Blogster");
@@ -32,7 +32,6 @@ test("When signed in, shows logout button", async () => {
 
   //pupeteer will wait for the element to render
   await page.waitFor("a[href='/auth/logout']");
-
   //gets element
   const logoutText = await page.getContentsOf("a[href='/auth/logout']");
 
