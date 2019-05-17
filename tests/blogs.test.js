@@ -1,5 +1,5 @@
 const Page = require("./helpers/page");
-
+const mongoose = require("mongoose");
 let page;
 
 beforeEach(async () => {
@@ -13,6 +13,7 @@ afterEach(async () => {
 
 afterAll(async () => {
   await page.close();
+  await mongoose.disconnect();
 });
 describe("When logged in", async () => {
   beforeEach(async () => {
