@@ -12,7 +12,10 @@ afterEach(async () => {
   await page.close();
 });
 
-test.only("The header has the correct text", async () => {
+afterAll(async () => {
+  await page.close();
+});
+test("The header has the correct text", async () => {
   const text = await page.$eval("a.brand-logo", el => el.innerHTML);
 
   expect(text).toEqual("Blogster");
